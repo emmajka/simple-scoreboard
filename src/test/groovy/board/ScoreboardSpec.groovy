@@ -1,6 +1,5 @@
 package board
 
-
 import exception.GameStartException
 import game.Game
 import game.GameId
@@ -112,13 +111,21 @@ class ScoreboardSpec extends Specification {
         then:
         actual == expected
     }
-    def "when getting scoreboard games then it should return an empty collection"() {
+
+    def "when getting scoreboard games with different scores then it should return a collection sorted by total score"() {
         given:
-        def sb = new Scoreboard()
-        def game1 = Game.builder().teamOneScore(2).teamTwoScore(1).build()
-        def game2 = Game.builder().teamOneScore(3).teamTwoScore(1).build()
-        def game3 = Game.builder().teamOneScore(0).teamTwoScore(1).build()
+        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(2).teamTwoScore(1).build()
+        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
+        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
+        def inputGames = new HashMap()
+        inputGames.put(game1.getGameId(), game1)
+        inputGames.put(game2.getGameId(), game2)
+        inputGames.put(game3.getGameId(), game3)
+
         def expected = Arrays.asList(game2, game1, game3)
+
+        def sb = new Scoreboard()
+        sb.games.putAll(inputGames)
 
         when:
         def actual = sb.getScores()

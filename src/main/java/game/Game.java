@@ -16,6 +16,10 @@ public class Game {
     private int teamOneScore;
     private int teamTwoScore;
 
+    public int getTotalScore() {
+        return teamOneScore + teamTwoScore;
+    }
+
     public void updateScore(int newTeamOneScore, int newTeamTwoScore) throws GameScoreUpdateException {
         if (newTeamOneScore < 0 || newTeamTwoScore < 0) {
             var errMsg = String.format("%s vs %s game score could not be updated! Setting negative values is prohibited!", newTeamOneScore, newTeamTwoScore);

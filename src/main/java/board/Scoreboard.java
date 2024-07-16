@@ -5,10 +5,11 @@ import game.Game;
 import game.GameId;
 import lombok.Getter;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Scoreboard {
     @Getter
@@ -39,6 +40,8 @@ public class Scoreboard {
     }
 
     public List<Game> getScores() {
-        return Collections.emptyList();
+        return games.values().stream()
+                .sorted(Comparator.comparingInt(Game::getTotalScore).reversed())
+                .collect(Collectors.toList());
     }
 }
