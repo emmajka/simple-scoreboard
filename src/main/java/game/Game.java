@@ -14,4 +14,8 @@ public class Game {
     private String teamTwo;
     private int teamOneScore;
     private int teamTwoScore;
+
+    public void updateScore(int teamOneScore, int teamTwoScore) {
+
+    }
 }
