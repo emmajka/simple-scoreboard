@@ -5,7 +5,6 @@ import game.Game;
 import game.GameId;
 import lombok.Getter;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +42,16 @@ public class Scoreboard {
 
     public List<Game> getScores() {
         return entries.values().stream()
+                .sorted((sbe1, sbe2) -> {
+                    if (sbe1.getGame().getTotalScore() == sbe2.getGame().getTotalScore()) {
+                        return Long.compare(sbe1.getInsertionTime(), sbe2.getInsertionTime());
+                    } else if (sbe1.getGame().getTotalScore() < sbe2.getGame().getTotalScore()) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
                 .map(ScoreboardEntry::getGame)
-                .sorted(Comparator.comparingInt(Game::getTotalScore).reversed())
                 .collect(Collectors.toList());
     }
 }
