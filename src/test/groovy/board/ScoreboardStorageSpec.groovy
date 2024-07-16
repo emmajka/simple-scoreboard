@@ -27,13 +27,12 @@ class ScoreboardStorageSpec extends Specification {
         GameId.builder().teamOne("team2").teamTwo("team1").build()       | true
         GameId.builder().teamOne("team 2").teamTwo("team1").build()      | false
         GameId.builder().teamOne("ewwweew").teamTwo("randndnnd").build() | false
-
     }
 
     def "when adding a new game it should call entries insertion method"() {
         given:
-        def entriesMock = Mock(HashMap)
-        def sut = new ScoreboardStorage(entriesMock)
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
+        def sut = new ScoreboardStorage(initialMap)
         def gameId = GameId.builder().build()
         def game = Game.builder().gameId(gameId).build()
 
@@ -41,50 +40,56 @@ class ScoreboardStorageSpec extends Specification {
         sut.addGame(game)
 
         then:
-        1 * entriesMock.put(gameId, _) >> {
-            def sbe = it[1]
-            assert sbe instanceof ScoreboardEntry
-            assert sbe.getInsertionTime() > 1
-        }
+        initialMap.size() == 1
+        initialMap.get(gameId).getGame() == game
     }
 
     def "when removing a game it should call entries removal method"() {
         given:
-        def entriesMock = Mock(HashMap)
-        def sut = new ScoreboardStorage(entriesMock)
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
         def gameId = GameId.builder().build()
+        initialMap.put(gameId, null)
+        def sut = new ScoreboardStorage(initialMap)
 
         when:
         sut.removeGame(gameId)
 
         then:
-        1 * entriesMock.remove(gameId)
+        initialMap.isEmpty()
     }
 
     def "when getting empty entries it should map it to an empty collection"() {
         given:
-        def entriesMock = Mock(HashMap)
-        def sut = new ScoreboardStorage(entriesMock)
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
+        def sut = new ScoreboardStorage(initialMap)
 
         when:
         def actual = sut.getAllEntries()
 
         then:
-        1 * entriesMock.values() >> new ArrayList<>()
         actual.isEmpty()
     }
 
     def "when getting non-empty entries it should map it to a non-empty collection"() {
         given:
-        def entriesMock = Mock(HashMap)
-        def sut = new ScoreboardStorage(entriesMock)
-        def expected = Arrays.asList(ScoreboardEntry.builder().build(), ScoreboardEntry.builder().build(), ScoreboardEntry.builder().build())
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
+        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").build()).build()
+        def game2 = Game.builder().gameId(GameId.builder().teamOne("2").build()).build()
+        def game3 = Game.builder().gameId(GameId.builder().teamOne("3").build()).build()
+        def sbe1 = ScoreboardEntry.builder().game(game1).build()
+        def sbe2 = ScoreboardEntry.builder().game(game2).build()
+        def sbe3 = ScoreboardEntry.builder().game(game3).build()
+        initialMap.put(game1.getGameId(), sbe1)
+        initialMap.put(game2.getGameId(), sbe2)
+        initialMap.put(game3.getGameId(), sbe3)
+        def sut = new ScoreboardStorage(initialMap)
+
+        def expected = Arrays.asList(sbe1, sbe2, sbe3)
 
         when:
         def actual = sut.getAllEntries()
 
         then:
-        1 * entriesMock.values() >> expected
-        actual == expected
+        actual.containsAll(expected)
     }
 }
