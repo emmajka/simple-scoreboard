@@ -14,9 +14,12 @@ import java.util.stream.Collectors;
 public class Scoreboard {
     @Getter
     private final Map<GameId, Game> games;
+    @Getter
+    private final Map<GameId, ScoreboardEntry> entries;
 
     public Scoreboard() {
         games = new HashMap<>();
+        entries = new HashMap<>();
     }
 
     public void addGame(Game game) throws Exception {
@@ -39,7 +42,8 @@ public class Scoreboard {
     }
 
     public List<Game> getScores() {
-        return games.values().stream()
+        return entries.values().stream()
+                .map(ScoreboardEntry::getGame)
                 .sorted(Comparator.comparingInt(Game::getTotalScore).reversed())
                 .collect(Collectors.toList());
     }

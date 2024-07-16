@@ -118,14 +118,14 @@ class ScoreboardSpec extends Specification {
         def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
         def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
         def inputGames = new HashMap()
-        inputGames.put(game1.getGameId(), game1)
-        inputGames.put(game2.getGameId(), game2)
-        inputGames.put(game3.getGameId(), game3)
+        inputGames.put(game1.getGameId(), ScoreboardEntry.builder().game(game1).build())
+        inputGames.put(game2.getGameId(), ScoreboardEntry.builder().game(game2).build())
+        inputGames.put(game3.getGameId(), ScoreboardEntry.builder().game(game3).build())
 
         def expected = Arrays.asList(game2, game1, game3)
 
         def sb = new Scoreboard()
-        sb.games.putAll(inputGames)
+        sb.entries.putAll(inputGames)
 
         when:
         def actual = sb.getScores()
@@ -140,14 +140,14 @@ class ScoreboardSpec extends Specification {
         def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
         def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
         def inputGames = new HashMap()
-        inputGames.put(game1.getGameId(), game1)
-        inputGames.put(game2.getGameId(), game2)
-        inputGames.put(game3.getGameId(), game3)
+        inputGames.put(game1.getGameId(), ScoreboardEntry.builder().game(game1).build())
+        inputGames.put(game2.getGameId(), ScoreboardEntry.builder().game(game2).build())
+        inputGames.put(game3.getGameId(), ScoreboardEntry.builder().game(game3).build())
 
         def expected = Arrays.asList(game2, game1, game3)
 
         def sb = new Scoreboard()
-        sb.games.putAll(inputGames)
+        sb.entries.putAll(inputGames)
 
         when:
         def actual = sb.getScores()
@@ -163,9 +163,9 @@ class ScoreboardSpec extends Specification {
         def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(2).teamTwoScore(1).build()
         def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(3).build()
         def inputGames = new HashMap()
-        inputGames.put(game1.getGameId(), game1)
-        inputGames.put(game3.getGameId(), game3)
-        inputGames.put(game2.getGameId(), game2)
+        inputGames.put(game1.getGameId(), ScoreboardEntry.builder().game(game1).build())
+        inputGames.put(game3.getGameId(), ScoreboardEntry.builder().game(game3).build())
+        inputGames.put(game2.getGameId(), ScoreboardEntry.builder().game(game2).build())
         def expected = Arrays.asList(game1, game3, game2)
 
         def sb = new Scoreboard()
