@@ -1,5 +1,6 @@
 package game
 
+import exception.GameIdCreationException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -21,6 +22,19 @@ class GameIdBuilderSpec extends Specification {
         "team 1"     | "team 2"     | "team 1"        | "team 2"
         " team 1 "   | " team 2"    | "team 1"        | "team 2"
         "TeaM 1"     | "TEAM 2"     | "team 1"        | "team 2"
+    }
 
+    def "when creating a game ID with duplicated normalized team names then it should thrown an exception"() {
+        when:
+        sut.build(team1, team2)
+
+        then:
+        thrown(GameIdCreationException)
+
+        where:
+        team1     | team2
+        "team1"   | "team1"
+        "Team1  " | "Team1"
+        "  tEAm1" | "    TEAM1 "
     }
 }
