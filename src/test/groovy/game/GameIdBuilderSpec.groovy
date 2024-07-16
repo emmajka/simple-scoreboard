@@ -24,7 +24,7 @@ class GameIdBuilderSpec extends Specification {
         "TeaM 1"     | "TEAM 2"     | "team 1"        | "team 2"
     }
 
-    def "when creating a game ID with duplicated normalized team names then it should thrown an exception"() {
+    def "when creating a game ID with duplicated normalized team names then it should throw an exception"() {
         when:
         sut.build(team1, team2)
 
@@ -36,5 +36,23 @@ class GameIdBuilderSpec extends Specification {
         "team1"   | "team1"
         "Team1  " | "Team1"
         "  tEAm1" | "    TEAM1 "
+    }
+
+    def "when creating a game ID with malformed team names then it should throw an exception"(){
+        when:
+        sut.build(team1, team2)
+
+        then:
+        thrown(GameIdCreationException)
+
+        where:
+        team1 | team2
+        null  | null
+        ""    | null
+        null  | ""
+        ""    | ""
+        "   "    | ""
+        ""    | "   "
+        "  "    | "   "
     }
 }
