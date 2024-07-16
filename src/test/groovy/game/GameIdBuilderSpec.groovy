@@ -18,8 +18,9 @@ class GameIdBuilderSpec extends Specification {
         where:
         inputTeamOne | inputTeamTwo | expectedTeamOne | expectedTeamTwo
         "team1"      | "team2"      | "team1"         | "team2"
-        "team 1"      | "team 2"      | "team 1"         | "team 2"
-        " team 1 "      | " team 2"      | "team 1"         | "team 2"
+        "team 1"     | "team 2"     | "team 1"        | "team 2"
+        " team 1 "   | " team 2"    | "team 1"        | "team 2"
+        "TeaM 1"     | "TEAM 2"     | "team 1"        | "team 2"
 
     }
 }

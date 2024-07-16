@@ -3,6 +3,12 @@ package game;
 
 public class GameIdBuilder {
     public GameId build(String teamOne, String teamTwo) {
-        return GameId.builder().teamOne(teamOne).teamTwo(teamTwo).build();
+        String teamOneNormalized = normalize(teamOne);
+        String teamTwoNormalized = normalize(teamTwo);
+        return GameId.builder().teamOne(teamOneNormalized).teamTwo(teamTwoNormalized).build();
+    }
+
+    private String normalize(String str) {
+        return str.trim().toLowerCase();
     }
 }
