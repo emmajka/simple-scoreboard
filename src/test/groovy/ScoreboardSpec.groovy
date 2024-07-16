@@ -1,12 +1,13 @@
 import exception.GameStartException
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class ScoreboardSpec extends Specification {
 
     def "when adding a new game then it should update games collection correctly"() {
         given:
-        var sb = new Scoreboard()
-        var game = Game.builder().teamOne("Team 1").teamTwo("Team 2").build()
+        def sb = new Scoreboard()
+        def game = Game.builder().teamOne("Team 1").teamTwo("Team 2").build()
 
         when:
         sb.addGame(game)
@@ -18,11 +19,11 @@ class ScoreboardSpec extends Specification {
 
     def "when adding same game more then once then it should throw an exception - only one game in-progress for teams"() {
         given:
-        var sb = new Scoreboard()
-        var team1 = "Team 1"
-        var team2 = "Team 2"
-        var gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
-        var game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+        def sb = new Scoreboard()
+        def team1 = "Team 1"
+        def team2 = "Team 2"
+        def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
+        def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
 
         when:
         sb.addGame(game)
@@ -30,5 +31,26 @@ class ScoreboardSpec extends Specification {
 
         then:
         thrown(GameStartException)
+    }
+    
+    def "when adding same game more then once with names switched then it should throw an exception - only one game in progress for teams, team position should not matter"(){
+        given:
+        def sb = new Scoreboard()
+        def team1 = "Team 1"
+        def team2 = "Team 2"
+
+        def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
+        def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+
+        def gameIdAlt = GameId.builder().teamOne(team2).teamTwo(team1).build()
+        def gameAlt = Game.builder().gameId(gameIdAlt).teamOne(team1).teamTwo(team2).build()
+
+        when:
+        sb.addGame(game)
+        sb.addGame(gameAlt)
+
+        then:
+        thrown(GameStartException)
+
     }
 }
