@@ -1,4 +1,8 @@
+package board;
+
 import exception.GameStartException;
+import game.Game;
+import game.GameId;
 import lombok.Getter;
 
 import java.util.HashMap;

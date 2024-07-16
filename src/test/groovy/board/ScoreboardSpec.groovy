@@ -1,6 +1,10 @@
+package board
+
+
 import exception.GameStartException
+import game.Game
+import game.GameId
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class ScoreboardSpec extends Specification {
 

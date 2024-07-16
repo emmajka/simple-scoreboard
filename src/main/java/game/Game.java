@@ -1,3 +1,5 @@
+package game;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
