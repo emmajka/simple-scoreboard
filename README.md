@@ -24,25 +24,31 @@ Note: it does not validate on duplicates and other rules, using a pre-initialize
 ### Add a new game to scoreboard
 In order to add a new game to an existing scoreboard a `addGame` method can be used, it allows to safely add a new game to scoreboard.
 
-#### create a new game ID
-Each game is identified by its unique game ID
-
+        // create a new game ID, each game is identified by its unique game ID 
         var gameIdFactory = new GameIdFactory() // default implementation of game ID factory
         var gameId = gameIdFactory.create(${teamOne}, ${teamTwo}) // useteam names as input parameters
         
-#### create a game
+        // create new game 
         var gameFactory = new GameFactory() // default implementation of game factory
         var game = gameFactory.create("team1", "team2", gameId)
 
-#### add game to storage
+        // create a new scoreboard or re-use existing one, provide necessary dependences
         var scoreboard = new Scoreboard(${dependencies})
         scoreboard.addGame(game)
 
 Game instance requires a unique GameId instance, in ensures that a game will meet requirements for storage.
-Creation of game and its game ID is de-coupled, it gives control to user on how he would like to create a game ID. It is recommended to use team names for it.
+Creation of game and its game ID is de-coupled, it gives control to user on how he would like to create a game ID. 
+It is recommended to use team names for it or some unique string values for input string pair.
 
 ### Finish a game
 Finishing a game equals to its removal of scoreboard storage. If game does not exist in the storage nothing will happen.
 
-        var scoreboard = new Scoreboard(...) // a existing scoreboard
+        // create a new scoreboard or re-use existing one, provide necessary dependences
+        var scoreboard = new Scoreboard(${dependencies})
         scoreboard.finishGame(${gameId}) // use Your game ID as input
+
+### Update game's score
+Game instance are mutable by definition, in order to update their score they need to be accessed and modified.
+
+        // get a game instance, run updateScore on it
+        game.updateScore(1, 2)
