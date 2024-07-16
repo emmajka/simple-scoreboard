@@ -1,3 +1,4 @@
+import exception.GameStartException
 import spock.lang.Specification
 
 class ScoreboardSpec extends Specification {
@@ -25,6 +26,6 @@ class ScoreboardSpec extends Specification {
         sb.addGame(game)
 
         then:
-        thrown(Exception)
+        thrown(GameStartException)
     }
 }

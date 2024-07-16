@@ -1,3 +1,4 @@
+import exception.GameStartException;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class Scoreboard {
                     "%s vs %s game is already in progress! Unable to start new game if there is an existing game in-progress!",
                     game.getTeamOne(), game.getTeamTwo()
             );
-            throw new Exception(errMsg);
+            throw new GameStartException(errMsg);
         }
 
         games.put(gameId, game);
