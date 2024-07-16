@@ -112,7 +112,7 @@ class ScoreboardSpec extends Specification {
         actual == expected
     }
 
-    def "when getting scoreboard games with different scores then it should return a collection sorted by total score"() {
+    def "when getting scoreboard games with different scores then it should return a collection sorted by total score descending"() {
         given:
         def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(2).teamTwoScore(1).build()
         def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
@@ -123,6 +123,50 @@ class ScoreboardSpec extends Specification {
         inputGames.put(game3.getGameId(), game3)
 
         def expected = Arrays.asList(game2, game1, game3)
+
+        def sb = new Scoreboard()
+        sb.games.putAll(inputGames)
+
+        when:
+        def actual = sb.getScores()
+
+        then:
+        actual == expected
+    }
+
+    def "when getting scoreboard games with same scores then it should return a collection sorted by total score descending and creation date ascending"() {
+        given:
+        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(2).teamTwoScore(1).build()
+        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
+        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
+        def inputGames = new HashMap()
+        inputGames.put(game1.getGameId(), game1)
+        inputGames.put(game2.getGameId(), game2)
+        inputGames.put(game3.getGameId(), game3)
+
+        def expected = Arrays.asList(game2, game1, game3)
+
+        def sb = new Scoreboard()
+        sb.games.putAll(inputGames)
+
+        when:
+        def actual = sb.getScores()
+
+        then:
+        actual == expected
+    }
+
+
+    def "when getting scoreboard games with same total score values then it should return games by insertion descending order"() {
+        given:
+        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(1).teamTwoScore(2).build()
+        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(2).teamTwoScore(1).build()
+        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(3).build()
+        def inputGames = new HashMap()
+        inputGames.put(game1.getGameId(), game1)
+        inputGames.put(game3.getGameId(), game3)
+        inputGames.put(game2.getGameId(), game2)
+        def expected = Arrays.asList(game1, game3, game2)
 
         def sb = new Scoreboard()
         sb.games.putAll(inputGames)

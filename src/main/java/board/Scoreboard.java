@@ -28,7 +28,6 @@ public class Scoreboard {
             );
             throw new GameStartException(errMsg);
         }
-
         games.put(gameId, game);
     }
 
