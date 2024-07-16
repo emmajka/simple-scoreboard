@@ -1,6 +1,6 @@
 package game
 
-import exception.IncorrectGameScoreException
+import exception.GameScoreUpdateException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -35,7 +35,7 @@ class GameSpec extends Specification {
         game.updateScore(newTeamOneScore, newTeamTwoScore)
 
         then:
-        thrown(IncorrectGameScoreException)
+        thrown(GameScoreUpdateException)
 
         where:
         newTeamOneScore | newTeamTwoScore
@@ -54,7 +54,7 @@ class GameSpec extends Specification {
         game.updateScore(newTeamOneScore, newTeamTwoScore)
 
         then:
-        thrown(IncorrectGameScoreException)
+        thrown(GameScoreUpdateException)
 
         where:
         newTeamOneScore | newTeamTwoScore
