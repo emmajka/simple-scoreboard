@@ -30,5 +30,9 @@ public class Scoreboard {
     }
 
     public void finishGame(GameId gameId) {
+        var existingGame = games.get(gameId);
+        if (existingGame != null) {
+            games.remove(gameId);
+        }
     }
 }
