@@ -100,4 +100,30 @@ class ScoreboardSpec extends Specification {
         sb.getGames().size() == 1
         sb.getGames().get(gameId) == game
     }
+
+    def "when getting an empty scoreboard games then it should return an empty collection"() {
+        given:
+        def sb = new Scoreboard()
+        def expected = Collections.emptyList()
+
+        when:
+        def actual = sb.getScores()
+
+        then:
+        actual == expected
+    }
+    def "when getting scoreboard games then it should return an empty collection"() {
+        given:
+        def sb = new Scoreboard()
+        def game1 = Game.builder().teamOneScore(2).teamTwoScore(1).build()
+        def game2 = Game.builder().teamOneScore(3).teamTwoScore(1).build()
+        def game3 = Game.builder().teamOneScore(0).teamTwoScore(1).build()
+        def expected = Arrays.asList(game2, game1, game3)
+
+        when:
+        def actual = sb.getScores()
+
+        then:
+        actual == expected
+    }
 }

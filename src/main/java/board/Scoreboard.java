@@ -5,7 +5,9 @@ import game.Game;
 import game.GameId;
 import lombok.Getter;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Scoreboard {
@@ -34,5 +36,9 @@ public class Scoreboard {
         if (existingGame != null) {
             games.remove(gameId);
         }
+    }
+
+    public List<Game> getScores() {
+        return Collections.emptyList();
     }
 }
