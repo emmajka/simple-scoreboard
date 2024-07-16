@@ -6,8 +6,8 @@ import exception.GameIdCreationException;
 import java.util.Objects;
 import java.util.Optional;
 
-public class GameIdBuilder {
-    public GameId build(String teamOne, String teamTwo) throws GameIdCreationException {
+public class GameIdFactory {
+    public GameId create(String teamOne, String teamTwo) throws GameIdCreationException {
         String teamOneNormalized = normalize(teamOne);
         String teamTwoNormalized = normalize(teamTwo);
         if (teamOne == null || teamOne.isEmpty() || teamTwo == null || teamTwo.isEmpty()) {
