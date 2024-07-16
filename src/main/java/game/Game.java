@@ -15,7 +15,8 @@ public class Game {
     private int teamOneScore;
     private int teamTwoScore;
 
-    public void updateScore(int teamOneScore, int teamTwoScore) {
-
+    public void updateScore(int newTeamOneScore, int newTeamTwoScore) {
+        this.teamOneScore = newTeamOneScore;
+        this.teamTwoScore = newTeamTwoScore;
     }
 }
