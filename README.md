@@ -1,1 +1,1 @@
-# simple-scoreboard
+# Simple scoreboard project
