@@ -27,7 +27,7 @@ class GameSpec extends Specification {
     }
 
     @Unroll
-    def "when updating game score with negative values then it should throw an exception"() {
+    def "when updating any game score with negative values then it should throw an exception"() {
         given:
         def game = Game.builder().teamOneScore(0).teamTwoScore(0).build()
 
@@ -43,5 +43,25 @@ class GameSpec extends Specification {
         1               | -1
         -1              | -1
         -123            | -23232
+    }
+
+    @Unroll
+    def "when updating any game score with smaller values then it should throw an exception"() {
+        given:
+        def game = Game.builder().teamOneScore(3).teamTwoScore(3).build()
+
+        when:
+        game.updateScore(newTeamOneScore, newTeamTwoScore)
+
+        then:
+        thrown(IncorrectGameScoreException)
+
+        where:
+        newTeamOneScore | newTeamTwoScore
+        0               | 4
+        4               | 0
+        2               | 3
+        5               | 1
+        0               | 5
     }
 }
