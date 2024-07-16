@@ -11,8 +11,16 @@ public class Scoreboard {
         games = new HashMap<>();
     }
 
-    public void addGame(Game game) {
+    public void addGame(Game game) throws Exception {
         var gameId = String.format("%s vs %s", game.getTeamOne(), game.getTeamTwo());
+        if (games.get(gameId) != null) {
+            var errMsg = String.format(
+                    "%s vs %s game is already in progress! Unable to start new game if there is an existing game in-progress!",
+                    game.getTeamOne(), game.getTeamTwo()
+            );
+            throw new Exception(errMsg);
+        }
+
         games.put(gameId, game);
     }
 }
