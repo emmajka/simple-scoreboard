@@ -2,7 +2,6 @@ package board;
 
 import game.Game;
 import game.GameId;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class ScoreboardStorage {
-    @Getter
+
     private final Map<GameId, ScoreboardEntry> entries;
 
     public boolean gameExists(GameId gameId) {

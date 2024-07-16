@@ -3,22 +3,17 @@ package board;
 import exception.GameStartException;
 import game.Game;
 import game.GameId;
-import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Scoreboard {
-    @Getter
-    private final Map<GameId, ScoreboardEntry> entries;
 
     private final ScoreboardStorage scoreboardStorage;
 
     public Scoreboard(ScoreboardStorage scoreboardStorage) {
         this.scoreboardStorage = scoreboardStorage;
-        this.entries = new HashMap<>();
     }
 
     public void addGame(Game game) throws GameStartException {
