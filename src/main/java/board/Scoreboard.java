@@ -28,4 +28,7 @@ public class Scoreboard {
 
         games.put(gameId, game);
     }
+
+    public void finishGame(GameId gameId) {
+    }
 }

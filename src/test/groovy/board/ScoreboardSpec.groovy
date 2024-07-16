@@ -36,8 +36,8 @@ class ScoreboardSpec extends Specification {
         then:
         thrown(GameStartException)
     }
-    
-    def "when adding same game more then once with names switched then it should throw an exception - only one game in progress for teams, team position should not matter"(){
+
+    def "when adding same game more then once with names switched then it should throw an exception - only one game in progress for teams, team position should not matter"() {
         given:
         def sb = new Scoreboard()
         def team1 = "Team 1"
@@ -55,6 +55,26 @@ class ScoreboardSpec extends Specification {
 
         then:
         thrown(GameStartException)
+    }
 
+    def "when finish a game then it should be removed from the games score board"() {
+        given:
+        def sb = new Scoreboard()
+        def team1 = "Team 1"
+        def team2 = "Team 2"
+        def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
+        def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+
+        when:
+        sb.getGames().put(gameId, game)
+
+        then:
+        sb.getGames().size() == 1
+
+        when:
+        sb.finishGame(gameId)
+
+        then:
+        sb.getGames().isEmpty()
     }
 }
