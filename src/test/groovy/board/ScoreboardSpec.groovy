@@ -53,7 +53,7 @@ class ScoreboardSpec extends Specification {
         def expected = Collections.emptyList()
 
         when:
-        def actual = sut.getGames()
+        def actual = sut.getGamesSummary()
 
         then:
         1 * scoreboardStorageMock.getAllEntries() >> expected
@@ -62,63 +62,42 @@ class ScoreboardSpec extends Specification {
 
     def "when getting scoreboard games with different scores then it should return a collection sorted by total score descending"() {
         given:
-        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(2).teamTwoScore(1).build()
-        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
-        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
+        def sbe1 = buildSbe("poland", "brazil", 2, 1, 0)
+        def sbe2 = buildSbe("Croatia", "Serbia", 3, 1, 0)
+        def sbe3 = buildSbe("USA", "NRD", 0, 2, 0)
+        def inputEntries = Arrays.asList(sbe2, sbe1, sbe3)
 
-        def inputEntries = Arrays.asList(
-                ScoreboardEntry.builder().game(game1).build(),
-                ScoreboardEntry.builder().game(game2).build(),
-                ScoreboardEntry.builder().game(game3).build()
-        )
-        def expected = Arrays.asList(game2, game1, game3)
+        def expected = Arrays.asList("Croatia 3 - Serbia 1", "poland 2 - brazil 1", "USA 0 - NRD 2")
 
         when:
-        def actual = sut.getGames()
+        def actual = sut.getGamesSummary()
 
         then:
         1 * scoreboardStorageMock.getAllEntries() >> inputEntries
         actual == expected
     }
 
-    def "when getting scoreboard games with same scores then it should return a collection sorted by total score descending and creation date ascending"() {
+    def "when getting scoreboard games with same scores then it should return a collection sorted by insertion date ascending order"() {
         given:
-        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(2).teamTwoScore(1).build()
-        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(3).teamTwoScore(1).build()
-        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(1).build()
-        def inputEntries = Arrays.asList(
-                ScoreboardEntry.builder().game(game1).build(),
-                ScoreboardEntry.builder().game(game2).build(),
-                ScoreboardEntry.builder().game(game3).build()
-        )
+        def sbe1 = buildSbe("poland", "brazil", 2, 1, 0)
+        def sbe2 = buildSbe("Croatia", "Serbia", 2, 1, 2)
+        def sbe3 = buildSbe("USA", "NRD", 0, 3, 1)
+        def inputEntries = Arrays.asList(sbe2, sbe1, sbe3)
 
-        def expected = Arrays.asList(game2, game1, game3)
+        def expected = Arrays.asList("Croatia 2 - Serbia 1", "USA 0 - NRD 3", "poland 2 - brazil 1")
 
         when:
-        def actual = sut.getGames()
+        def actual = sut.getGamesSummary()
 
         then:
         1 * scoreboardStorageMock.getAllEntries() >> inputEntries
         actual == expected
     }
 
-    def "when getting scoreboard games with same total score values then it should return games by insertion descending order"() {
-        given:
-        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").teamTwo("2").build()).teamOneScore(1).teamTwoScore(2).build()
-        def game2 = Game.builder().gameId(GameId.builder().teamOne("3").teamTwo("4").build()).teamOneScore(2).teamTwoScore(1).build()
-        def game3 = Game.builder().gameId(GameId.builder().teamOne("5").teamTwo("6").build()).teamOneScore(0).teamTwoScore(3).build()
-        def inputEntries = Arrays.asList(
-                ScoreboardEntry.builder().game(game1).insertionTime(1L).build(),
-                ScoreboardEntry.builder().game(game3).insertionTime(2L).build(),
-                ScoreboardEntry.builder().game(game2).insertionTime(3L).build()
-        )
-        def expected = Arrays.asList(game2, game3, game1)
-
-        when:
-        def actual = sut.getGames()
-
-        then:
-        1 * scoreboardStorageMock.getAllEntries() >> inputEntries
-        actual == expected
+    private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {
+        def gameId = GameId.builder().teamOne("1").teamTwo("2").build()
+        def game = Game.builder().gameId(gameId).teamOne(teamOne).teamTwo(teamTwo).teamOneScore(teamOneScore).teamTwoScore(teamTwoScore).build()
+        def sbe = ScoreboardEntry.builder().game(game).insertionTime(insertionTime).build()
+        return sbe
     }
 }

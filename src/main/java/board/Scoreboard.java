@@ -3,8 +3,8 @@ package board;
 import exception.GameStartException;
 import game.Game;
 import game.GameId;
+import game.GameSummary;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +32,8 @@ public class Scoreboard {
         scoreboardStorage.removeGame(gameId);
     }
 
-    public List<Game> getGames() {
-        return scoreboardStorage.getAllEntries().stream()
+    public List<String> getGamesSummary() {
+        var result = scoreboardStorage.getAllEntries().stream()
                 .sorted((sbe1, sbe2) -> {
                     if (sbe1.getGame().getTotalScore() == sbe2.getGame().getTotalScore()) {
                         return Long.compare(sbe2.getInsertionTime(), sbe1.getInsertionTime());
@@ -44,6 +44,14 @@ public class Scoreboard {
                     }
                 })
                 .map(ScoreboardEntry::getGame)
+                .map(game -> GameSummary.builder()
+                        .teamOne(game.getTeamOne())
+                        .teamTwo(game.getTeamTwo())
+                        .teamOneScore(game.getTeamOneScore())
+                        .teamTwoScore(game.getTeamTwoScore())
+                        .build())
+                .map(GameSummary::display)
                 .collect(Collectors.toList());
+        return result;
     }
 }
