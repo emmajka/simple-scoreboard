@@ -57,7 +57,7 @@ class ScoreboardSpec extends Specification {
         thrown(GameStartException)
     }
 
-    def "when finish a game then it should be removed from the games score board"() {
+    def "when finishing a game then it should be removed from the games score board"() {
         given:
         def sb = new Scoreboard()
         def team1 = "Team 1"
@@ -76,5 +76,28 @@ class ScoreboardSpec extends Specification {
 
         then:
         sb.getGames().isEmpty()
+    }
+
+    def "when finishing a non-existent game then it scoreboard games state should not change"() {
+        given:
+        def sb = new Scoreboard()
+        def team1 = "Team 1"
+        def team2 = "Team 2"
+        def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
+        def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+        def fakeGameId = GameId.builder().teamOne("some fake value").teamTwo("other fake value").build()
+
+        when:
+        sb.getGames().put(gameId, game)
+
+        then:
+        sb.getGames().size() == 1
+
+        when:
+        sb.finishGame(fakeGameId)
+
+        then:
+        sb.getGames().size() == 1
+        sb.getGames().get(gameId) == game
     }
 }
