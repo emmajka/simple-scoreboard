@@ -112,7 +112,7 @@ class ScoreboardSpec extends Specification {
                 ScoreboardEntry.builder().game(game3).insertionTime(2L).build(),
                 ScoreboardEntry.builder().game(game2).insertionTime(3L).build()
         )
-        def expected = Arrays.asList(game1, game3, game2)
+        def expected = Arrays.asList(game2, game3, game1)
 
         when:
         def actual = sut.getGames()

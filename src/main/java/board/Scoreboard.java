@@ -36,7 +36,7 @@ public class Scoreboard {
         return scoreboardStorage.getAllEntries().stream()
                 .sorted((sbe1, sbe2) -> {
                     if (sbe1.getGame().getTotalScore() == sbe2.getGame().getTotalScore()) {
-                        return Long.compare(sbe1.getInsertionTime(), sbe2.getInsertionTime());
+                        return Long.compare(sbe2.getInsertionTime(), sbe1.getInsertionTime());
                     } else if (sbe1.getGame().getTotalScore() < sbe2.getGame().getTotalScore()) {
                         return 1;
                     } else {
