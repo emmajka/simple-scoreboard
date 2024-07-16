@@ -12,6 +12,7 @@ public class Scoreboard {
     }
 
     public void addGame(Game game) {
-
+        var gameId = String.format("%s vs %s", game.getTeamOne(), game.getTeamTwo());
+        games.put(gameId, game);
     }
 }
