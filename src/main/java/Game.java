@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Game {
+    private GameId gameId;
     private String teamOne;
     private String teamTwo;
     @Builder.Default
