@@ -9,4 +9,8 @@ import lombok.Data;
 public class Game {
     private String teamOne;
     private String teamTwo;
+    @Builder.Default
+    private int teamOneScore = 0;
+    @Builder.Default
+    private int teamTwoScore = 0;
 }
