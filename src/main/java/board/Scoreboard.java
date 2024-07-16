@@ -12,31 +12,29 @@ import java.util.stream.Collectors;
 
 public class Scoreboard {
     @Getter
-    private final Map<GameId, Game> games;
-    @Getter
     private final Map<GameId, ScoreboardEntry> entries;
 
     public Scoreboard() {
-        games = new HashMap<>();
         entries = new HashMap<>();
     }
 
     public void addGame(Game game) throws Exception {
         var gameId = game.getGameId();
-        if (games.get(gameId) != null) {
+        if (entries.get(gameId) != null) {
             var errMsg = String.format(
                     "%s vs %s game is already in progress! Unable to start new game if there is an existing game in-progress!",
                     game.getTeamOne(), game.getTeamTwo()
             );
             throw new GameStartException(errMsg);
         }
-        games.put(gameId, game);
+        var sbe = ScoreboardEntry.builder().game(game).insertionTime(System.currentTimeMillis()).build();
+        entries.put(gameId, sbe);
     }
 
     public void finishGame(GameId gameId) {
-        var existingGame = games.get(gameId);
+        var existingGame = entries.get(gameId);
         if (existingGame != null) {
-            games.remove(gameId);
+            entries.remove(gameId);
         }
     }
 

@@ -16,8 +16,8 @@ class ScoreboardSpec extends Specification {
         sb.addGame(game)
 
         then:
-        sb.getGames().size() == 1
-        sb.getGames().get(game.getGameId()) == game
+        sb.getEntries().size() == 1
+        sb.getEntries().get(game.getGameId()).getGame() == game
     }
 
     def "when adding same game more then once then it should throw an exception - only one game in-progress for teams"() {
@@ -63,18 +63,19 @@ class ScoreboardSpec extends Specification {
         def team2 = "Team 2"
         def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
         def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+        def sbe = ScoreboardEntry.builder().game(game).build()
 
         when:
-        sb.getGames().put(gameId, game)
+        sb.getEntries().put(gameId, sbe)
 
         then:
-        sb.getGames().size() == 1
+        sb.getEntries().size() == 1
 
         when:
         sb.finishGame(gameId)
 
         then:
-        sb.getGames().isEmpty()
+        sb.getEntries().isEmpty()
     }
 
     def "when finishing a non-existent game then it scoreboard games state should not change"() {
@@ -84,20 +85,21 @@ class ScoreboardSpec extends Specification {
         def team2 = "Team 2"
         def gameId = GameId.builder().teamOne(team1).teamTwo(team2).build()
         def game = Game.builder().gameId(gameId).teamOne(team1).teamTwo(team2).build()
+        def sbe = ScoreboardEntry.builder().game(game).build()
         def fakeGameId = GameId.builder().teamOne("some fake value").teamTwo("other fake value").build()
 
         when:
-        sb.getGames().put(gameId, game)
+        sb.getEntries().put(gameId, sbe)
 
         then:
-        sb.getGames().size() == 1
+        sb.getEntries().size() == 1
 
         when:
         sb.finishGame(fakeGameId)
 
         then:
-        sb.getGames().size() == 1
-        sb.getGames().get(gameId) == game
+        sb.getEntries().size() == 1
+        sb.getEntries().get(gameId).getGame() == game
     }
 
     def "when getting an empty scoreboard games then it should return an empty collection"() {

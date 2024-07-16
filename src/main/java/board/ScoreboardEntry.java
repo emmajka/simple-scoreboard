@@ -11,7 +11,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ScoreboardEntry {
-    private GameId gameId;
     private Game game;
     private long insertionTime;
 
