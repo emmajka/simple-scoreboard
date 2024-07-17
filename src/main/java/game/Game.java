@@ -18,9 +18,4 @@ public class Game {
     public int getTotalScore() {
         return teamOneScore + teamTwoScore;
     }
-
-    public void updateScore(int newTeamOneScore, int newTeamTwoScore) {
-        this.teamOneScore = newTeamOneScore;
-        this.teamTwoScore = newTeamTwoScore;
-    }
 }
