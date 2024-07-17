@@ -4,6 +4,7 @@ import exception.GameStartException
 import game.Game
 import game.GameId
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class ScoreboardSpec extends Specification {
 
@@ -106,7 +107,7 @@ class ScoreboardSpec extends Specification {
         !actual
     }
 
-
+    @Unroll
     def "when updating game's score for an existing game on scoreboard then it should return true indicating and game's score should be updated"() {
         given:
         def gameId = GameId.builder().build()
@@ -114,13 +115,20 @@ class ScoreboardSpec extends Specification {
         def sbe = ScoreboardEntry.builder().game(game).build()
 
         when:
-        def actual = sut.updateGameScore(gameId, 1, 2)
+        def actual = sut.updateGameScore(gameId, teamOneScore, teamTwoScore)
 
         then:
         1 * scoreboardStorageMock.getEntry(gameId) >> sbe
-        game.getTeamOneScore() == 1
-        game.getTeamTwoScore() == 2
+        game.getTeamOneScore() == teamOneScore
+        game.getTeamTwoScore() == teamTwoScore
         actual
+
+        where:
+        teamOneScore | teamTwoScore
+        0            | 0
+        1            | 1
+        2            | 1
+
     }
 
     private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {
