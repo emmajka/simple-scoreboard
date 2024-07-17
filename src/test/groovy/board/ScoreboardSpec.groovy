@@ -106,6 +106,22 @@ class ScoreboardSpec extends Specification {
         !actual
     }
 
+
+    def "when updating game's score for an existing game on scoreboard then it should return true indicating and game's score should be updated"() {
+        given:
+        def gameId = GameId.builder().build()
+        def game = Game.builder().teamOneScore(0).teamTwoScore(0).build()
+
+        when:
+        def actual = sut.updateGameScore(gameId, 1, 2)
+
+        then:
+        1 * scoreboardStorageMock.getEntry(gameId) >> Optional.of(game)
+        game.getTeamOneScore() == 1
+        game.getTeamTwoScore() == 2
+        actual
+    }
+
     private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {
         def gameId = GameId.builder().teamOne("1").teamTwo("2").build()
         def game = Game.builder().gameId(gameId).teamOne(teamOne).teamTwo(teamTwo).teamOneScore(teamOneScore).teamTwoScore(teamTwoScore).build()
