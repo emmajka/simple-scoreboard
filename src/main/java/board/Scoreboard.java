@@ -54,4 +54,8 @@ public class Scoreboard {
                 .collect(Collectors.toList());
         return result;
     }
+
+    public boolean updateGameScore(GameId gameId, int teamOneScore, int teamTwoScore) {
+        return true;
+    }
 }

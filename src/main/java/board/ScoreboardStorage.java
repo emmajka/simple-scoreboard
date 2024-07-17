@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class ScoreboardStorage {
@@ -27,5 +28,9 @@ public class ScoreboardStorage {
 
     public List<ScoreboardEntry> getAllEntries() {
         return entries.values().stream().toList();
+    }
+
+    public Optional<ScoreboardEntry> getEntry(GameId gameId) {
+        return Optional.empty();
     }
 }

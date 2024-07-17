@@ -94,6 +94,17 @@ class ScoreboardSpec extends Specification {
         actual == expected
     }
 
+    def "when updating game's score for game which is not on scoreboard then it should return false indicating failure at score update"() {
+        given:
+        def gameId = GameId.builder().build()
+
+        when:
+        def actual = sut.updateGameScore(gameId, 1, 1)
+
+        then:
+        !actual
+    }
+
     private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {
         def gameId = GameId.builder().teamOne("1").teamTwo("2").build()
         def game = Game.builder().gameId(gameId).teamOne(teamOne).teamTwo(teamTwo).teamOneScore(teamOneScore).teamTwoScore(teamTwoScore).build()
