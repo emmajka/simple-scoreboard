@@ -92,4 +92,37 @@ class ScoreboardStorageSpec extends Specification {
         then:
         actual.containsAll(expected)
     }
+
+    def "when getting a non-existing entry from storage then it should return a null value"() {
+        given:
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
+        def sut = new ScoreboardStorage(initialMap)
+
+        when:
+        def actual = sut.getEntry(GameId.builder().build())
+
+        then:
+        actual == null
+    }
+
+    def "when getting an existing entry from storage then it should return a an entry"() {
+        given:
+        def initialMap = new HashMap<GameId, ScoreboardEntry>()
+        def sbe = buildSbe("team 1", "team 2")
+        initialMap.put(sbe.getGame().getGameId(), sbe)
+        def sut = new ScoreboardStorage(initialMap)
+
+        when:
+        def actual = sut.getEntry(sbe.getGame().getGameId())
+
+        then:
+        actual == sbe
+    }
+
+    private static def buildSbe(String teamOne, String teamTwo) {
+        def gameId = GameId.builder().teamOne("1").teamTwo("2").build()
+        def game = Game.builder().gameId(gameId).teamOne(teamOne).teamTwo(teamTwo).build()
+        def sbe = ScoreboardEntry.builder().game(game).build()
+        return sbe
+    }
 }
