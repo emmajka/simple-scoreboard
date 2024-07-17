@@ -130,7 +130,8 @@ class ScoreboardSpec extends Specification {
         2            | 1
     }
 
-    def "when subtracting game's score of one of the teams then it should thrown an exception indicating an unwanted behavior"(){
+    @Unroll
+    def "when subtracting game's score of one of the teams then it should thrown an exception indicating an unwanted behavior"() {
         given:
         def gameId = GameId.builder().build()
         def game = Game.builder().teamOneScore(1).teamTwoScore(1).build()
@@ -142,6 +143,14 @@ class ScoreboardSpec extends Specification {
         then:
         1 * scoreboardStorageMock.getEntry(gameId) >> sbe
         thrown(Exception)
+
+        where:
+        teamOneScore | teamTwoScore
+        0            | 0
+        1            | 0
+        0            | 1
+        -1           | 1
+        1            | -1
     }
 
     private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {

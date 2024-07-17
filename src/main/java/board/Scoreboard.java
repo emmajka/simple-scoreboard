@@ -63,7 +63,7 @@ public class Scoreboard {
         }
         var game = existingEntry.getGame();
         if (teamOneScore < game.getTeamOneScore() || teamTwoScore < game.getTeamTwoScore()) {
-            var errMsg = String.format("%s vs %s game score could not be updated! Subtracting score values is prohibited!", teamOneScore, teamTwoScore);
+            var errMsg = String.format("%s vs %s game score could not be updated! New score values can't be lesser then existing values!", teamOneScore, teamTwoScore);
             throw new GameScoreUpdateException(errMsg);
         }
         game.updateScore(teamOneScore, teamTwoScore);
