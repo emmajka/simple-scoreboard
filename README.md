@@ -4,7 +4,12 @@
 1. It is only possible to update score of a non-finished game
 2. Finishing game equals to its removal from the scoreboard's internal collection
 3. Game's summary return type is a plain formatted String
-4. 
+4. Single-thread access, concurrent access was not taken into consideration hence user should be careful when attempting to use scoreboard concurrently.
+5. For sake of simplicity and to not clutter the code inheritance was not used but modularization of code enables simple extension of code and introduction of inheritance. 
+
+## Description
+A simple minimal-dependency scoreboard project. Enables performing of basic operations such as creation of new scoreboard, create of new game and its score modification.
+
 ## How to
 
 ### Create a new scoreboard
