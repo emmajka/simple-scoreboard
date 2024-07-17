@@ -34,7 +34,7 @@ public class Scoreboard {
     }
 
     public List<String> getGamesSummary() {
-        var result = scoreboardStorage.getAllEntries().stream()
+        return scoreboardStorage.getAllEntries().stream()
                 .sorted((sbe1, sbe2) -> {
                     if (sbe1.getGame().getTotalScore() == sbe2.getGame().getTotalScore()) {
                         return Long.compare(sbe2.getInsertionTime(), sbe1.getInsertionTime());
@@ -53,7 +53,6 @@ public class Scoreboard {
                         .build())
                 .map(GameSummary::display)
                 .collect(Collectors.toList());
-        return result;
     }
 
     public boolean updateGameScore(GameId gameId, int teamOneScore, int teamTwoScore) throws GameScoreUpdateException {
