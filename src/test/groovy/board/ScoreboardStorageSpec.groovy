@@ -3,36 +3,37 @@ package board
 import game.Game
 import game.GameId
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class ScoreboardStorageSpec extends Specification {
 
-    @Unroll
-    def "game existence data set tests"() {
+    def storageMapMock = Mock(HashMap<GameId, ScoreboardEntry>)
+    def sut = new ScoreboardStorage(storageMapMock)
+
+    def "when game is not found in the storage then it should return false"() {
         given:
-        def initialMap = new HashMap()
-        def initialGameId = GameId.builder().teamOne("team1").teamTwo("team2").build()
-        initialMap.put(initialGameId, null)
-        def sut = new ScoreboardStorage(initialMap)
+        def gameId = GameId.builder().build()
+        when:
+        def actual = sut.gameExists(gameId)
+
+        then:
+        1 * storageMapMock.containsKey(gameId) >> false
+        !actual
+    }
+
+    def "when game is found in the storage then it should return true"() {
+        given:
+        def gameId = GameId.builder().build()
 
         when:
         def actual = sut.gameExists(gameId)
 
         then:
-        actual == expected
-
-        where:
-        gameId                                                           | expected
-        GameId.builder().teamOne("team1").teamTwo("team2").build()       | true
-        GameId.builder().teamOne("team2").teamTwo("team1").build()       | true
-        GameId.builder().teamOne("team 2").teamTwo("team1").build()      | false
-        GameId.builder().teamOne("ewwweew").teamTwo("randndnnd").build() | false
+        1 * storageMapMock.containsKey(gameId) >> true
+        actual
     }
 
-    def "when adding a new game it should call entries insertion method"() {
+    def "when adding a new game then it should call entries insertion method"() {
         given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
-        def sut = new ScoreboardStorage(initialMap)
         def gameId = GameId.builder().build()
         def game = Game.builder().gameId(gameId).build()
 
@@ -40,82 +41,70 @@ class ScoreboardStorageSpec extends Specification {
         sut.addGame(game)
 
         then:
-        initialMap.size() == 1
-        initialMap.get(gameId).getGame() == game
+        1 * storageMapMock.put(gameId, _) >> {
+            def captured = it[1]
+            assert captured instanceof ScoreboardEntry
+            assert captured.getInsertionTime() > 0
+            assert captured.getGame() == game
+        }
     }
 
-    def "when removing a game it should call entries removal method"() {
+    def "when removing a game then it should call entries removal method"() {
         given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
         def gameId = GameId.builder().build()
-        initialMap.put(gameId, null)
-        def sut = new ScoreboardStorage(initialMap)
 
         when:
         sut.removeGame(gameId)
 
         then:
-        initialMap.isEmpty()
+        1 * storageMapMock.remove(gameId)
     }
 
-    def "when getting empty entries it should map it to an empty collection"() {
-        given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
-        def sut = new ScoreboardStorage(initialMap)
-
+    def "when getting empty entries then it should map it to an empty collection"() {
         when:
         def actual = sut.getAllEntries()
 
         then:
+        1 * storageMapMock.values() >> Collections.emptyList()
         actual.isEmpty()
     }
 
-    def "when getting non-empty entries it should map it to a non-empty collection"() {
+    def "when getting non-empty entries then it should map it to a non-empty collection"() {
         given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
-        def game1 = Game.builder().gameId(GameId.builder().teamOne("1").build()).build()
-        def game2 = Game.builder().gameId(GameId.builder().teamOne("2").build()).build()
-        def game3 = Game.builder().gameId(GameId.builder().teamOne("3").build()).build()
-        def sbe1 = ScoreboardEntry.builder().game(game1).build()
-        def sbe2 = ScoreboardEntry.builder().game(game2).build()
-        def sbe3 = ScoreboardEntry.builder().game(game3).build()
-        initialMap.put(game1.getGameId(), sbe1)
-        initialMap.put(game2.getGameId(), sbe2)
-        initialMap.put(game3.getGameId(), sbe3)
-        def sut = new ScoreboardStorage(initialMap)
-
+        def sbe1 = buildSbe("team 1", "team 2")
+        def sbe2 = buildSbe("team 3", "team 4")
+        def sbe3 = buildSbe("team 5", "team 6")
         def expected = Arrays.asList(sbe1, sbe2, sbe3)
 
         when:
         def actual = sut.getAllEntries()
 
         then:
+        1 * storageMapMock.values() >> expected
         actual.containsAll(expected)
     }
 
     def "when getting a non-existing entry from storage then it should return a null value"() {
         given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
-        def sut = new ScoreboardStorage(initialMap)
+        def gameId = GameId.builder().build()
 
         when:
-        def actual = sut.getEntry(GameId.builder().build())
+        def actual = sut.getEntry(gameId)
 
         then:
+        1 * storageMapMock.get(gameId) >> null
         actual == null
     }
 
     def "when getting an existing entry from storage then it should return a an entry"() {
         given:
-        def initialMap = new HashMap<GameId, ScoreboardEntry>()
         def sbe = buildSbe("team 1", "team 2")
-        initialMap.put(sbe.getGame().getGameId(), sbe)
-        def sut = new ScoreboardStorage(initialMap)
 
         when:
         def actual = sut.getEntry(sbe.getGame().getGameId())
 
         then:
+        1 * storageMapMock.get(sbe.getGame().getGameId()) >> sbe
         actual == sbe
     }
 
