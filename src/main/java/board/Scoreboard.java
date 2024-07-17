@@ -1,12 +1,12 @@
 package board;
 
+import exception.GameScoreUpdateException;
 import exception.GameStartException;
 import game.Game;
 import game.GameId;
 import game.GameSummary;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Scoreboard {
@@ -56,8 +56,13 @@ public class Scoreboard {
         return result;
     }
 
-    public boolean updateGameScore(GameId gameId, int teamOneScore, int teamTwoScore) {
-        Optional<ScoreboardEntry> existingEntry = scoreboardStorage.getEntry(gameId);
-        return existingEntry.isPresent();
+    public boolean updateGameScore(GameId gameId, int teamOneScore, int teamTwoScore) throws GameScoreUpdateException {
+        ScoreboardEntry existingEntry = scoreboardStorage.getEntry(gameId);
+        if (existingEntry == null) {
+            return false;
+        }
+        Game existingGame = existingEntry.getGame();
+        existingEntry.getGame().updateScore(teamOneScore, teamTwoScore);
+        return true;
     }
 }

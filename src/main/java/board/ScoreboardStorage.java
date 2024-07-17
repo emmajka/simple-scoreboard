@@ -30,7 +30,7 @@ public class ScoreboardStorage {
         return entries.values().stream().toList();
     }
 
-    public Optional<ScoreboardEntry> getEntry(GameId gameId) {
-        return Optional.empty();
+    public ScoreboardEntry getEntry(GameId gameId) {
+        return null;
     }
 }

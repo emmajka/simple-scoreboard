@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Game {
     private GameId gameId;
     private String teamOne;

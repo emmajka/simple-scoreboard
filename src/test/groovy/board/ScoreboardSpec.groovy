@@ -102,7 +102,7 @@ class ScoreboardSpec extends Specification {
         def actual = sut.updateGameScore(gameId, 1, 1)
 
         then:
-        1 * scoreboardStorageMock.getEntry(gameId) >> Optional.empty()
+        1 * scoreboardStorageMock.getEntry(gameId) >> null
         !actual
     }
 
@@ -111,12 +111,13 @@ class ScoreboardSpec extends Specification {
         given:
         def gameId = GameId.builder().build()
         def game = Game.builder().teamOneScore(0).teamTwoScore(0).build()
+        def sbe = ScoreboardEntry.builder().game(game).build()
 
         when:
         def actual = sut.updateGameScore(gameId, 1, 2)
 
         then:
-        1 * scoreboardStorageMock.getEntry(gameId) >> Optional.of(game)
+        1 * scoreboardStorageMock.getEntry(gameId) >> sbe
         game.getTeamOneScore() == 1
         game.getTeamTwoScore() == 2
         actual

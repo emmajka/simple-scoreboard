@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Value
 @Builder
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameId {
     String teamOne;
     String teamTwo;
