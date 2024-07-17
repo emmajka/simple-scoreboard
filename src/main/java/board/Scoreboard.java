@@ -66,7 +66,8 @@ public class Scoreboard {
             var errMsg = String.format("%s vs %s game score could not be updated! New score values can't be lesser then existing values!", teamOneScore, teamTwoScore);
             throw new GameScoreUpdateException(errMsg);
         }
-        game.updateScore(teamOneScore, teamTwoScore);
+        game.setTeamOneScore(teamOneScore);
+        game.setTeamTwoScore(teamTwoScore);
         return true;
     }
 }

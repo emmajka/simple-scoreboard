@@ -57,7 +57,7 @@ class ScoreboardFlowBDD extends Specification {
         storageMap.get(game2id) == null
 
         when: "updating a score on an in-progress game"
-        game1.updateScore(1, 2)
+        sb.updateGameScore(game1.getGameId(),1, 2)
 
         then: "games score should be updated in the storage"
         game1.getTeamOneScore() == 1
