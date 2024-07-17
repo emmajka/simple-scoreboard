@@ -80,12 +80,20 @@ class ScoreboardSpec extends Specification {
 
     def "when getting scoreboard games with same scores then it should return a collection sorted by insertion date ascending order"() {
         given:
-        def sbe1 = buildSbe("poland", "brazil", 2, 1, 0)
-        def sbe2 = buildSbe("Croatia", "Serbia", 2, 1, 2)
-        def sbe3 = buildSbe("USA", "NRD", 0, 3, 1)
-        def inputEntries = Arrays.asList(sbe2, sbe1, sbe3)
+        def sbe1 = buildSbe("Mexico", "Canada", 0, 5, 0)
+        def sbe2 = buildSbe("Spain", "Brazil", 10, 2, 1)
+        def sbe3 = buildSbe("Germany", "France", 2, 2, 2)
+        def sbe4 = buildSbe("Uruguay", "Italy", 6, 6, 3)
+        def sbe5 = buildSbe("Argentina", "Australia", 3, 1, 4)
+        def inputEntries = Arrays.asList(sbe4, sbe2, sbe1, sbe5, sbe3)
 
-        def expected = Arrays.asList("Croatia 2 - Serbia 1", "USA 0 - NRD 3", "poland 2 - brazil 1")
+        def expected = Arrays.asList(
+                "Uruguay 6 - Italy 6",
+                "Spain 10 - Brazil 2",
+                "Mexico 0 - Canada 5",
+                "Argentina 3 - Australia 1",
+                "Germany 2 - France 2"
+        )
 
         when:
         def actual = sut.getGamesSummary()
