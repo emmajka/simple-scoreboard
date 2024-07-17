@@ -3,7 +3,8 @@
 ## Assumptions
 1. It is only possible to update score of a non-finished game
 2. Finishing game equals to its removal from the scoreboard's internal collection
-
+3. Game's summary return type is a plain formatted String
+4. 
 ## How to
 
 ### Create a new scoreboard
@@ -54,3 +55,9 @@ Game instance are mutable by definition, in order to update their score they nee
         var scoreboard = new Scoreboard(${dependencies})
         var gameId = scoreboard.getEntry(${gameId}).getGame().getGameId()
         scoreboard.updateGameScore(gameId, ${teamOneScore}, ${teamTwoScore}) // use Your game ID as input
+
+### Get games summary
+Game summary can be retrieved for all in-progress games
+
+        var scoreboard = new Scoreboard(${dependencies})
+        var gameId = scoreboard.getGamesSummary()
