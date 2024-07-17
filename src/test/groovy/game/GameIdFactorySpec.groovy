@@ -24,6 +24,7 @@ class GameIdFactorySpec extends Specification {
         "TeaM 1"     | "TEAM 2"     | "team 1"        | "team 2"
     }
 
+    @Unroll
     def "when creating a game ID with duplicated normalized team names then it should throw an exception"() {
         when:
         sut.create(team1, team2)
@@ -38,6 +39,7 @@ class GameIdFactorySpec extends Specification {
         "  tEAm1" | "    TEAM1 "
     }
 
+    @Unroll
     def "when creating a game ID with malformed team names then it should throw an exception"(){
         when:
         sut.create(team1, team2)
