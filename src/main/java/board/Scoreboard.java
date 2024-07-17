@@ -6,6 +6,7 @@ import game.GameId;
 import game.GameSummary;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Scoreboard {
@@ -56,6 +57,7 @@ public class Scoreboard {
     }
 
     public boolean updateGameScore(GameId gameId, int teamOneScore, int teamTwoScore) {
-        return true;
+        Optional<ScoreboardEntry> existingEntry = scoreboardStorage.getEntry(gameId);
+        return existingEntry.isPresent();
     }
 }

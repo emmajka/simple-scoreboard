@@ -102,6 +102,7 @@ class ScoreboardSpec extends Specification {
         def actual = sut.updateGameScore(gameId, 1, 1)
 
         then:
+        1 * scoreboardStorageMock.getEntry(gameId) >> Optional.empty()
         !actual
     }
 
