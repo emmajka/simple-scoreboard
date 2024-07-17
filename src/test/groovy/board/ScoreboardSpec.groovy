@@ -108,7 +108,7 @@ class ScoreboardSpec extends Specification {
     }
 
     @Unroll
-    def "when updating game's score for an existing game on scoreboard then it should return true indicating and game's score should be updated"() {
+    def "when updating game's score for an existing game on scoreboard then it should return true and game's score should be updated"() {
         given:
         def gameId = GameId.builder().build()
         def game = Game.builder().teamOneScore(0).teamTwoScore(0).build()
@@ -128,7 +128,20 @@ class ScoreboardSpec extends Specification {
         0            | 0
         1            | 1
         2            | 1
+    }
 
+    def "when subtracting game's score of one of the teams then it should thrown an exception indicating an unwanted behavior"(){
+        given:
+        def gameId = GameId.builder().build()
+        def game = Game.builder().teamOneScore(1).teamTwoScore(1).build()
+        def sbe = ScoreboardEntry.builder().game(game).build()
+
+        when:
+        sut.updateGameScore(gameId, 0, 0)
+
+        then:
+        1 * scoreboardStorageMock.getEntry(gameId) >> sbe
+        thrown(Exception)
     }
 
     private static def buildSbe(String teamOne, String teamTwo, int teamOneScore, int teamTwoScore, long insertionTime) {
