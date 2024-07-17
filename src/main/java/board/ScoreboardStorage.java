@@ -30,6 +30,6 @@ public class ScoreboardStorage {
     }
 
     public ScoreboardEntry getEntry(GameId gameId) {
-        return null;
+        return entries.get(gameId);
     }
 }
