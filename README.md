@@ -1,7 +1,7 @@
 # Simple scoreboard project
 
 ## Assumptions
-1. Update of game score does not care if game finished or not, it will update the result nevertheless
+1. It is only possible to update score of a non-finished game
 2. Finishing game equals to its removal from the scoreboard's internal collection
 
 ## How to
@@ -51,4 +51,6 @@ Finishing a game equals to its removal of scoreboard storage. If game does not e
 Game instance are mutable by definition, in order to update their score they need to be accessed and modified.
 
         // get a game instance, run updateScore on it
-        game.updateScore(1, 2)
+        var scoreboard = new Scoreboard(${dependencies})
+        var gameId = scoreboard.getEntry(${gameId}).getGame().getGameId()
+        scoreboard.updateGameScore(gameId, ${teamOneScore}, ${teamTwoScore}) // use Your game ID as input
